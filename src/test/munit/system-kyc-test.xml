@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+
+    <munit:config name="system-kyc-test.xml" />
+
+    <munit:test name="test-valid-kyc-request" doc:id="test-valid-kyc-request" description="Test successful KYC processing in System API">
+        <munit:execution>
+            <set-payload value='#[{
+                "account": "019231203",
+                "First Name": "Katie",
+                "Last Name": "Hunter",
+                "amount": 100.00,
+                "currency": "PHP",
+                "Birthday": "10-30-1992"
+            }]' doc:name="Set Valid KYC Request"/>
+            <flow-ref doc:name="Call system-kyc-subflow" name="system-kyc-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that doc:name="Assert response code is 200" expression="#[payload.'response code']" is="#[MunitTools::equalTo(200)]"/>
+            <munit-tools:assert-that doc:name="Assert response message is success" expression="#[payload.'response message']" is="#[MunitTools::equalTo('Successful kyc')]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="test-kyc-request-with-different-account" doc:id="test-kyc-request-with-different-account" description="Test KYC processing with different account number">
+        <munit:execution>
+            <set-payload value='#[{
+                "account": "987654321",
+                "First Name": "John",
+                "Last Name": "Doe",
+                "amount": 250.50,
+                "currency": "USD",
+                "Birthday": "05-15-1985"
+            }]' doc:name="Set Different KYC Request"/>
+            <flow-ref doc:name="Call system-kyc-subflow" name="system-kyc-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that doc:name="Assert response code is 200" expression="#[payload.'response code']" is="#[MunitTools::equalTo(200)]"/>
+            <munit-tools:assert-that doc:name="Assert response message is success" expression="#[payload.'response message']" is="#[MunitTools::equalTo('Successful kyc')]"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>
