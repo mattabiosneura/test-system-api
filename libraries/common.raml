@@ -1,0 +1,153 @@
+#%RAML 1.0 Library
+
+types:
+  CreateUserRequest:
+    type: object
+    properties:
+      Application ID:
+        type: string
+        required: true
+        description: Unique application identifier
+      Request User ID:
+        type: string
+        required: true
+        description: ID of the user making the request
+      Data Origin:
+        type: string
+        required: true
+        description: Source system or process
+      Account Opening Jurisdiction:
+        type: string
+        required: true
+        description: Jurisdiction for account opening
+      Business Domain:
+        type: string
+        required: true
+        description: Business domain classification
+      SynchAPIFlag:
+        type: string
+        required: true
+        enum: ["Y", "N"]
+        description: Synchronous API flag
+      Relationship Team Code:
+        type: string
+        required: true
+        description: Code for the relationship team
+      Prospect:
+        type: array
+        required: true
+        items: ProspectInfo
+        description: Array of prospect information
+
+  ProspectInfo:
+    type: object
+    properties:
+      Applicant ID:
+        type: string
+        required: true
+        description: Unique applicant identifier
+      Primary Prospect Flag:
+        type: string
+        required: true
+        enum: ["Y", "N"]
+        description: Flag indicating if this is the primary prospect
+      Prospect Type:
+        type: string
+        required: true
+        enum: ["ORG", "IND"]
+        description: Type of prospect (Organization or Individual)
+      First Name:
+        type: string
+        required: false
+        description: First name of the prospect
+      Middle Name:
+        type: string
+        required: false
+        description: Middle name of the prospect
+      Last Name:
+        type: string
+        required: false
+        description: Last name of the prospect
+      Name Suffix:
+        type: string
+        required: false
+        description: Name suffix (Jr, Sr, etc.)
+      Title:
+        type: string
+        required: false
+        description: Title (Mr, Ms, Dr, etc.)
+      Alias:
+        type: array
+        required: false
+        items: string
+        description: Array of aliases
+      Display Name:
+        type: string
+        required: false
+        description: Display name for the prospect
+      Date Of Birth:
+        type: string
+        required: false
+        pattern: ^\d{2}/\d{2}/\d{2}$
+        description: Date of birth in MM/DD/YY format
+      SSN/TIN:
+        type: string
+        required: false
+        description: Social Security Number or Tax Identification Number
+      Age:
+        type: integer
+        required: false
+        minimum: 0
+        description: Age of the prospect
+      Gender:
+        type: string
+        required: false
+        enum: ["M", "F", "O"]
+        description: Gender (Male, Female, Other)
+      Marital Status:
+        type: string
+        required: false
+        enum: ["MA", "SI", "DI", "WI"]
+        description: Marital status (Married, Single, Divorced, Widowed)
+      Number Of Dependents:
+        type: integer
+        required: false
+        minimum: 0
+        description: Number of dependents
+      Primary Citizenship:
+        type: string
+        required: false
+        description: Primary citizenship country code
+      Secondary Citizenship:
+        type: array
+        required: false
+        items: string
+        description: Array of secondary citizenship country codes
+
+  CreateUserResponse:
+    type: object
+    properties:
+      Application ID:
+        type: string
+        required: true
+        description: Application identifier returned by the system
+      Request ID:
+        type: integer
+        required: true
+        description: Unique request identifier
+
+  ErrorResponse:
+    type: object
+    properties:
+      error:
+        type: string
+        required: true
+        description: Error message
+      code:
+        type: string
+        required: true
+        description: Error code
+      timestamp:
+        type: datetime
+        required: true
+        description: Timestamp when the error occurred

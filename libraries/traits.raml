@@ -1,0 +1,114 @@
+#%RAML 1.0 Library
+
+traits:
+  standardResponse:
+    description: Standard response headers and error handling
+    headers:
+      Content-Type:
+        type: string
+        default: application/json
+        description: Content type of the response
+      X-Request-ID:
+        type: string
+        required: false
+        description: Unique request identifier for tracking
+    responses:
+      400:
+        description: Bad Request - Invalid input parameters
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Invalid request parameters",
+                "code": "BAD_REQUEST",
+                "timestamp": "2024-01-01T12:00:00Z"
+              }
+      401:
+        description: Unauthorized - Authentication required
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Authentication required",
+                "code": "UNAUTHORIZED",
+                "timestamp": "2024-01-01T12:00:00Z"
+              }
+      403:
+        description: Forbidden - Insufficient permissions
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Insufficient permissions",
+                "code": "FORBIDDEN",
+                "timestamp": "2024-01-01T12:00:00Z"
+              }
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Internal server error",
+                "code": "INTERNAL_ERROR",
+                "timestamp": "2024-01-01T12:00:00Z"
+              }
+
+  authentication:
+    description: Authentication requirements for secure endpoints
+    headers:
+      Authorization:
+        type: string
+        required: true
+        description: Bearer token for authentication
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      X-API-Key:
+        type: string
+        required: false
+        description: API key for additional authentication
+    queryParameters:
+      client_id?:
+        type: string
+        description: Client identifier for OAuth flows
+
+  rateLimited:
+    description: Rate limiting information
+    headers:
+      X-RateLimit-Limit:
+        type: integer
+        description: Maximum number of requests allowed per time window
+      X-RateLimit-Remaining:
+        type: integer
+        description: Number of requests remaining in current time window
+      X-RateLimit-Reset:
+        type: integer
+        description: Time when the rate limit resets (Unix timestamp)
+    responses:
+      429:
+        description: Too Many Requests - Rate limit exceeded
+        body:
+          application/json:
+            example: |
+              {
+                "error": "Rate limit exceeded",
+                "code": "RATE_LIMIT_EXCEEDED",
+                "timestamp": "2024-01-01T12:00:00Z"
+              }
+
+  paginated:
+    description: Pagination support for list endpoints
+    queryParameters:
+      page?:
+        type: integer
+        minimum: 1
+        default: 1
+        description: Page number for pagination
+      limit?:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        description: Number of items per page
+      sort?:
+        type: string
+        description: Sort field and direction (e.g., "name:asc", "created:desc")

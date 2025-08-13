@@ -1,0 +1,71 @@
+#%RAML 1.0
+title: Sample API
+version: v1
+baseUri: /sampleapi
+
+uses:
+  common: libraries/common.raml
+  traits: libraries/traits.raml
+
+/createUser:
+  post:
+    is: [traits.standardResponse, traits.authentication]
+    description: Create a new user in the system
+    body:
+      application/json:
+        type: common.CreateUserRequest
+        example: |
+          {
+            "Application ID": "103",
+            "Request User ID": "176",
+            "Data Origin": "KYC Onboarding DEV",
+            "Account Opening Jurisdiction": "AMEA",
+            "Business Domain": "GEN",
+            "SynchAPIFlag": "Y",
+            "Relationship Team Code": "INV",
+            "Prospect": [
+              {
+                "Applicant ID": "APP5",
+                "Primary Prospect Flag": "Y",
+                "Prospect Type": "ORG",
+                "First Name": "MAHRI",
+                "Middle Name": "Mohamed Ben",
+                "Last Name": "Ahmed",
+                "Name Suffix": "Jr",
+                "Title": "Mr",
+                "Alias": [
+                  "My laden Company"
+                ],
+                "Display Name": "My laden Company",
+                "Date Of Birth": "02/02/20",
+                "SSN/TIN": "123456",
+                "Age": 0,
+                "Gender": "M",
+                "Marital Status": "MA",
+                "Number Of Dependents": 5,
+                "Primary Citizenship": "USA",
+                "Secondary Citizenship": [
+                  "TO",
+                  "USA"
+                ]
+              }
+            ]
+          }
+    responses:
+      200:
+        body:
+          application/json:
+            type: common.CreateUserResponse
+            example: |
+              {
+                "Application ID": "ApplicationID-EMEA",
+                "Request ID": 208
+              }
+      400:
+        body:
+          application/json:
+            type: common.ErrorResponse
+      500:
+        body:
+          application/json:
+            type: common.ErrorResponse
