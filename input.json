@@ -1,0 +1,20 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Faizan",
+      "subjects": [
+        { "name": "Math", "score": 85 },
+        { "name": "Science", "score": 90 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Shobhit",
+      "subjects": [
+        { "name": "Math", "score": 75 },
+        { "name": "Science", "score": 80 }
+      ]
+    }
+  ]
+}
